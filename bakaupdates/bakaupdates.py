@@ -16,10 +16,8 @@ class BakaUpdates(object):
 
     SEARCH_URL = 'https://www.mangaupdates.com/series.html'
 
-    def __init__(self):
-        pass
-
-    def get_similar_titles(self, title):
+    @staticmethod
+    def get_similar_titles(title):
         """Main function for extracting alternate titles
 
         :param title:
@@ -30,7 +28,7 @@ class BakaUpdates(object):
             'search': title
         }
 
-        link = requests.post(url=self.SEARCH_URL, params=payload)
+        link = requests.post(url=BakaUpdates.SEARCH_URL, params=payload)
         soup = Soup(link.text, 'html.parser')
 
         results = []
@@ -46,7 +44,8 @@ class BakaUpdates(object):
 
         return results
 
-    def get_alternative_titles(self, title='', link=''):
+    @staticmethod
+    def get_alternative_titles(title='', link=''):
         """Get alternative titles for the given title. Preferring link over title argument
 
         :param title:
@@ -54,7 +53,7 @@ class BakaUpdates(object):
         :return:
         """
         if title and not link:
-            link = self.get_similar_titles(title)[0]['link']
+            link = BakaUpdates.get_similar_titles(title)[0]['link']
 
         link = requests.post(url=link)
 
