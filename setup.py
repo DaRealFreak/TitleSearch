@@ -10,6 +10,6 @@ setup(name='BakaUpdates',
       author_email='steffen.keuper@web.de',
       license='MIT',
       install_requires=[
-          'numpy', 'bs4', 'requests',
+          'numpy', 'bs4', 'requests', 'html5lib',
       ],
       zip_safe=True)
