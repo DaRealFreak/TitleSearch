@@ -3,11 +3,18 @@
 from bakaupdates import BakaUpdates
 
 if __name__ == '__main__':
+    example_title = "Tate no Yuusha no Nariagari"
+
     bu = BakaUpdates()
-    titles = bu.search_titles("Tate no Yuusha no Nariagari")
-    for language in titles:
-        for title in titles[language]:
-            try:
-                print("[{0:s}]: {1:s}".format(language, title))
-            except UnicodeEncodeError:
-                print("[{0:s}]: lenghth: {1:d}".format(language, len(title)))
+
+    print('similar titles for: "{0:s}"'.format(example_title))
+    results = bu.get_similar_titles(example_title)
+    for title in results:
+        print('similarity: {1:.2f}%, title: "{0:s}"'.format(title['title'], float(title['similarity'])*100))
+
+    print('')
+    print('alternative titles for: "{0:s}"'.format(example_title))
+    alternate_titles = bu.get_alternative_titles(title=example_title)
+    for language in alternate_titles:
+        for title in alternate_titles[language]:
+            print("[{0:s}]: {1:s}".format(language, title))
