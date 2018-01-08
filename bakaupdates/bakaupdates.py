@@ -60,6 +60,8 @@ class BakaUpdates(object):
         # html.parser can't handle <br> tags instead of <br/> tags and will append all titles as child
         # to the previous title, html5lib is slower but works properly
         soup = Soup(link.text, 'html5lib')
+
+        release_title = soup.find('span', attrs={'class': ['releasestitle', 'tabletitle']}).text
         associated_names_tag = soup.find('b', string=re.compile("Associated Names"))
         alternative_titles = associated_names_tag.parent.find_next_sibling('div', attrs={'class': 'sContent'})
         for br in alternative_titles.find_all("br"):
@@ -67,7 +69,7 @@ class BakaUpdates(object):
         alternative_titles = [title.strip() for title in alternative_titles.text.split('\n') if title.strip()]
 
         grouped_titles = {
-            'english': [],
+            'english': [release_title],
             'korean': [],
             'japanese': []
         }
