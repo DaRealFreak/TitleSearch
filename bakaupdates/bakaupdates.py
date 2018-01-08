@@ -15,6 +15,7 @@ class BakaUpdates(object):
     """Module for extracting alternative language titles for titles from mangaupdates.com"""
 
     SEARCH_URL = 'https://www.mangaupdates.com/series.html'
+    KNOWN_LANGUAGES = [English, Japanese, Korean]
 
     @staticmethod
     def get_similar_titles(title):
@@ -68,19 +69,15 @@ class BakaUpdates(object):
             br.replace_with("\n")
         alternative_titles = [title.strip() for title in alternative_titles.text.split('\n') if title.strip()]
 
-        grouped_titles = {
-            'english': [release_title],
-            'korean': [],
-            'japanese': []
-        }
+        grouped_titles = {}
+        for language in BakaUpdates.KNOWN_LANGUAGES:
+            grouped_titles[language.__name__.lower()] = []
+        grouped_titles['english'] = [release_title]
+
         for title in alternative_titles:
-            if matches_language(title, English):
-                grouped_titles['english'].append(title)
-                continue
-            if matches_language(title, Korean):
-                grouped_titles['korean'].append(title)
-                continue
-            if matches_language(title, Japanese):
-                grouped_titles['japanese'].append(title)
-                continue
+            for language in BakaUpdates.KNOWN_LANGUAGES:
+                if matches_language(title, language):
+                    grouped_titles[language.__name__.lower()].append(title)
+                    continue
+
         return grouped_titles
