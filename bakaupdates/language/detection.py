@@ -5,6 +5,8 @@ import re
 
 import numpy as np
 
+from bakaupdates.language import LanguageTemplate
+
 
 def extract_unicode_characters(string):
     """Escape all unicode characters and return a generator for the int values of the unicode characters
@@ -25,13 +27,17 @@ def matches_language(title, language):
     :param language:
     :return:
     """
+    if not issubclass(language, LanguageTemplate):
+        raise EnvironmentError("{0:s} is not a subclass of the language template".format(language.__name__))
+
     unicode_characters = list(extract_unicode_characters(title))
-    if language.REQUIRES_UNICODE_CHARACTERS and not unicode_characters:
+    if language.requires_unicode_characters and not unicode_characters:
         return False
 
-    if language.FORBIDS_UNICODE_CHARACTERS and unicode_characters:
+    if language.forbids_unicode_characters and unicode_characters:
         return False
 
     # not sure but all titles I found so far have a clear character set, not shared
-    return all([np.any((language.UNICODE_CHARACTER_LOWERS <= int(unichar)) &
-                       (int(unichar) <= language.UNICODE_CHARACTER_UPPERS)) for unichar in unicode_characters])
+    # noinspection PyTypeChecker
+    return all([np.any((language.unicode_character_lowers <= int(unichar)) &
+                       (int(unichar) <= language.unicode_character_uppers)) for unichar in unicode_characters])
