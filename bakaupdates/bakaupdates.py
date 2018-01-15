@@ -6,7 +6,6 @@ import re
 import requests
 from bs4 import BeautifulSoup as Soup
 
-from bakaupdates.exceptions import *
 from bakaupdates.language.detection import matches_language
 from bakaupdates.language.language_settings import *
 
@@ -51,7 +50,7 @@ class BakaUpdates(object):
 
         results.sort(key=lambda item: item['similarity'], reverse=True)
         if len(results) < 1:
-            raise NoTitlesFoundException("No titles found")
+            return []
 
         return results
 
