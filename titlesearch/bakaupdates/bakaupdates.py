@@ -6,8 +6,8 @@ import re
 import requests
 from bs4 import BeautifulSoup as Soup
 
-from bakaupdates.language.detection import matches_language
-from bakaupdates.language.language_settings import *
+from titlesearch.language.detection import matches_language
+from titlesearch.language.language_settings import *
 
 
 class BakaUpdates(object):
@@ -29,7 +29,7 @@ class BakaUpdates(object):
             'search': title
         }
 
-        link = requests.post(url=BakaUpdates.SEARCH_URL, params=payload)
+        link = requests.get(url=BakaUpdates.SEARCH_URL, params=payload)
         soup = Soup(link.text, 'html.parser')
 
         seen_titles = []
@@ -65,7 +65,7 @@ class BakaUpdates(object):
         if title and not link:
             link = BakaUpdates.get_similar_titles(title)[0]['link']
 
-        link = requests.post(url=link)
+        link = requests.get(url=link)
 
         # html.parser can't handle <br> tags instead of <br/> tags and will append all titles as child
         # to the previous title, html5lib is slower but works properly

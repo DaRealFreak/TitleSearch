@@ -5,7 +5,7 @@ import re
 
 import numpy as np
 
-from bakaupdates.language import LanguageTemplate
+from titlesearch.language import LanguageTemplate
 
 
 def extract_unicode_characters(string):

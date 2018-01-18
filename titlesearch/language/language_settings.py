@@ -8,7 +8,7 @@ Unicode ranges mostly taken from here: http://www.rikai.com/library/kanjitables/
 
 import numpy as np
 
-from bakaupdates.language import LanguageTemplate
+from titlesearch.language import LanguageTemplate
 
 
 class English(LanguageTemplate):

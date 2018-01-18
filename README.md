@@ -1,6 +1,6 @@
-# BakaUpdates
+# TitleSearch
 
-small script to search for similar titles on [BakaUpdates](https://www.mangaupdates.com)
+small module to search for similar or alternative titles on [BakaUpdates](https://www.mangaupdates.com), [MyAnimeList](https://myanimelist.com) and [TheVisualNovelDatabase](https://vndb.org)
 
 
 ### Installing
@@ -21,12 +21,10 @@ Required:
 ### Usage
 You can BakaUpdates only as modules:
 ```
-from bakaupdates import BakaUpdates
+from titlesearch import get_similar_titles, get_alternative_titles
 
-BakaUpdates.get_similar_titles(example_title)
-
-BakaUpdates.get_alternative_titles(title='test')
-BakaUpdates.get_alternative_titles(link='https://www.mangaupdates.com/series.html?id=107199')
+get_similar_titles(example_title)
+get_alternative_titles(title=example_title)
 ```
 
 ## Development
@@ -42,4 +40,9 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Thanks
 
-A big thanks to [BakaUpdates](https://www.mangaupdates.com) who are maintaining the database with all the titles.
+A big thanks to 
+- [BakaUpdates](https://www.mangaupdates.com) 
+- [MyAnimeList](https://myanimelist.com) 
+- [TheVisualNovelDatabase](https://vndb.org)
+
+who are maintaining their databases with all the titles.

@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup, find_packages
 
-setup(name='bakaupdates',
+setup(name='titlesearch',
       version='0.0.1',
-      description='Small script to extract similar and translated titles',
+      description='Small script to extract similar and translated titles from '
+                  'light novels, novels, visual novels, mangas and animes',
       url='https://github.com/DaRealFreak/BakaUpdates',
       author='DaRealFreak',
       author_email='steffen.keuper@web.de',
