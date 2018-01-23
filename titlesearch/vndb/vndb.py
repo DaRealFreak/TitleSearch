@@ -87,7 +87,7 @@ class VisualNovelDatabase(object):
         rows = table_body.find_all('tr')
         for row in rows:
             cols = row.find_all('td')
-            cols = [ele for ele in [ele.text.strip() for ele in cols] if ele]
+            cols = [ele.text.strip() for ele in cols if ele.text.strip()]
             if cols[1:]:
                 result_data[cols[0]] = cols[1]
 
