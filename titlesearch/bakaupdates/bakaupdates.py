@@ -11,7 +11,7 @@ from titlesearch.language.language_settings import *
 
 
 class BakaUpdates(object):
-    """Module for extracting alternative language titles for titles from mangaupdates.com"""
+    """Module for extracting alternative language titles for titles from https://www.mangaupdates.com"""
 
     SEARCH_URL = 'https://www.mangaupdates.com/series.html'
     KNOWN_LANGUAGES = [English, Japanese, Korean]
@@ -40,18 +40,14 @@ class BakaUpdates(object):
             # BakaUpdates search returns titles without the added keywords first, so I'll skip the second result
             # which is most likely a novel
             if search_result not in seen_titles:
-                results.append({'title': search_result,
-                                'link': s.find_next('a', href=True)['href'],
-                                'similarity': difflib.SequenceMatcher(None,
-                                                                      search_result.lower(),
-                                                                      title.lower()).ratio()
-                                })
+                results.append({
+                    'title': search_result,
+                    'link': s.find_next('a', href=True)['href'],
+                    'similarity': difflib.SequenceMatcher(None, search_result.lower(), title.lower()).ratio()
+                })
                 seen_titles.append(search_result)
 
         results.sort(key=lambda item: item['similarity'], reverse=True)
-        if len(results) < 1:
-            return []
-
         return results
 
     @staticmethod
@@ -62,8 +58,16 @@ class BakaUpdates(object):
         :param link:
         :return:
         """
+        grouped_titles = {}
+        for language in BakaUpdates.KNOWN_LANGUAGES:
+            grouped_titles[language.__name__.lower()] = []
+
         if title and not link:
-            link = BakaUpdates.get_similar_titles(title)[0]['link']
+            link = BakaUpdates.get_similar_titles(title)
+            if link:
+                link = link[0]['link']
+            else:
+                return grouped_titles
 
         link = requests.get(url=link)
 
@@ -79,9 +83,6 @@ class BakaUpdates(object):
         alternative_titles = [BakaUpdates.clean_title(title) for title in alternative_titles.text.split('\n')
                               if title.strip()]
 
-        grouped_titles = {}
-        for language in BakaUpdates.KNOWN_LANGUAGES:
-            grouped_titles[language.__name__.lower()] = []
         grouped_titles['english'] = [release_title]
 
         for title in alternative_titles:
