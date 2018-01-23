@@ -2,8 +2,8 @@
 # coding: utf-8
 import unittest
 
-from bakaupdates.language.detection import matches_language
-from bakaupdates.language.language_settings import *
+from titlesearch.language.detection import matches_language
+from titlesearch.language.language_settings import *
 
 
 class TestLanguageDetection(unittest.TestCase):
@@ -62,7 +62,3 @@ class TestLanguageDetection(unittest.TestCase):
             results.append(matches_language(title, English))
 
         self.assertEqual(self.EXPECTED_RESULTS_ENGLISH, results)
-
-
-suite = unittest.TestLoader().loadTestsFromTestCase(TestLanguageDetection)
-unittest.TextTestRunner(verbosity=2).run(suite)
