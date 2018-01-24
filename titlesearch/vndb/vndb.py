@@ -3,6 +3,7 @@
 import difflib
 import re
 
+import jellyfish
 import requests
 from bs4 import BeautifulSoup as Soup
 
@@ -51,7 +52,7 @@ class VisualNovelDatabase(object):
             results.append({
                 'title': search_result['title'],
                 'link': VisualNovelDatabase.ROOT_URL + search_result['href'],
-                'similarity': difflib.SequenceMatcher(None, search_result['title'].lower(), title.lower()).ratio()
+                'similarity': jellyfish.jaro_distance(search_result['title'].lower(), title.lower())
             })
 
         results.sort(key=lambda item: item['similarity'], reverse=True)

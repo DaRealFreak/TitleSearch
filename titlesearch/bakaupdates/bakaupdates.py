@@ -3,6 +3,7 @@
 import difflib
 import re
 
+import jellyfish
 import requests
 from bs4 import BeautifulSoup as Soup
 
@@ -43,7 +44,7 @@ class BakaUpdates(object):
                 results.append({
                     'title': search_result,
                     'link': s.find_next('a', href=True)['href'],
-                    'similarity': difflib.SequenceMatcher(None, search_result.lower(), title.lower()).ratio()
+                    'similarity': jellyfish.jaro_distance(search_result.lower(), title.lower())
                 })
                 seen_titles.append(search_result)
 
