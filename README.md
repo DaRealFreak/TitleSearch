@@ -1,6 +1,6 @@
 # TitleSearch
 
-small module to search for similar or alternative titles on [BakaUpdates](https://www.mangaupdates.com), [MyAnimeList](https://myanimelist.com) and [TheVisualNovelDatabase](https://vndb.org)
+small module to search for similar or alternative titles on [BakaUpdates](https://www.mangaupdates.com), [MyAnimeList](https://myanimelist.net) and [TheVisualNovelDatabase](https://vndb.org)
 
 
 ### Installing
@@ -42,7 +42,7 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 A big thanks to 
 - [BakaUpdates](https://www.mangaupdates.com) 
-- [MyAnimeList](https://myanimelist.com) 
+- [MyAnimeList](https://myanimelist.net)
 - [TheVisualNovelDatabase](https://vndb.org)
 
 who are maintaining their databases with all the titles.
