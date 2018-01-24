@@ -46,6 +46,7 @@ class MyAnimeList(object):
                     'link': search_result['href'],
                     'similarity': jellyfish.jaro_distance(search_result.text.strip().lower(), title.lower())
                 })
+
         results.sort(key=lambda item: item['similarity'], reverse=True)
         return results
 
