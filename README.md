@@ -4,7 +4,7 @@ small module to search for similar or alternative titles on [BakaUpdates](https:
 
 
 ### Installing
-This script runs with [Python 3](https://www.python.org).
+This project works with [Python 3](https://www.python.org).
 
 Download this repository and run the setup.py to install all necessary dependencies
 
@@ -16,16 +16,18 @@ Required:
 * [html5lib](https://github.com/html5lib/html5lib-python) - standards-compliant library for parsing and serializing HTML documents and fragments in Python
 * [numpy](http://www.numpy.org) - fundamental package for scientific computing with Python
 * [requests](https://github.com/requests/requests) - http library
+* [jellyfish](https://github.com/jamesturk/jellyfish) - python library for doing approximate and phonetic matching of strings
 
 
 ### Usage
-You can BakaUpdates only as modules:
+You can use TitleSearch only as modules:
 ```
 from titlesearch import get_similar_titles, get_alternative_titles
 
-get_similar_titles(example_title)
-get_alternative_titles(title=example_title)
+get_similar_titles(title='example_title')
+get_alternative_titles(title='example_title')
 ```
+You can also check a working example in the provided [usage.py](https://github.com/DaRealFreak/TitleSearch/blob/master/usage.py)
 
 ## Development
 Want to contribute? Great!
