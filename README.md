@@ -1,5 +1,9 @@
 # TitleSearch
 
+[![Build Status](https://travis-ci.org/DaRealFreak/TitleSearch.svg?branch=master)](https://travis-ci.org/DaRealFreak/TitleSearch)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/DaRealFreak/TitleSearch/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/DaRealFreak/TitleSearch/?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/DaRealFreak/TitleSearch/badge.svg?branch=master)](https://coveralls.io/github/DaRealFreak/TitleSearch?branch=master)
+
 small module to search for similar or alternative titles on [BakaUpdates](https://www.mangaupdates.com), [MyAnimeList](https://myanimelist.net) and [TheVisualNovelDatabase](https://vndb.org)
 
 
