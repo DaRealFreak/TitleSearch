@@ -1,17 +1,19 @@
 #!/usr/local/bin/python
 # coding: utf-8
+
 import binascii
 import re
+from typing import Generator, Type
 
 import numpy as np
 
 from titlesearch.language import LanguageTemplate
 
 
-def extract_unicode_characters(string):
+def extract_unicode_characters(string: str) -> Generator:
     """Escape all unicode characters and return a generator for the int values of the unicode characters
 
-    :param string:
+    :type string: str
     :return:
     """
     unicode_characters = re.findall(b'\\\\u([a-f0-9]{4})', string.encode('unicode_escape'))
@@ -20,16 +22,13 @@ def extract_unicode_characters(string):
         yield int.from_bytes(s, byteorder='big')
 
 
-def matches_language(title, language):
+def matches_language(title: str, language: Type[LanguageTemplate]) -> bool:
     """Determine based on unicode elements, if the title matches the language pattern.
 
-    :param title:
-    :param language:
+    :type title: str
+    :type language: LanguageTemplate
     :return:
     """
-    if not issubclass(language, LanguageTemplate):
-        raise EnvironmentError("{0:s} is not a subclass of the language template".format(language.__name__))
-
     unicode_characters = list(extract_unicode_characters(title))
     if language.requires_unicode_characters and not unicode_characters:
         return False

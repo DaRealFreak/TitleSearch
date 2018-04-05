@@ -1,3 +1,6 @@
+#!/usr/local/bin/python
+# coding: utf-8
+
 from titlesearch.vndb import VisualNovelDatabase
 
 example_title = "Kantai Collection"

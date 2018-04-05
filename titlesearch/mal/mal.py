@@ -1,5 +1,6 @@
 #!/usr/local/bin/python
 # coding: utf-8
+
 import re
 
 import bs4
@@ -23,10 +24,10 @@ class MyAnimeList(object):
     }
 
     @staticmethod
-    def get_similar_titles(title):
+    def get_similar_titles(title: str) -> list:
         """Main function for extracting alternate titles
 
-        :param title:
+        :type title: str
         :return:
         """
         payload = {
@@ -51,11 +52,11 @@ class MyAnimeList(object):
         return results
 
     @staticmethod
-    def get_alternative_titles(title='', link=''):
+    def get_alternative_titles(title: str = '', link: str = '') -> dict:
         """Get alternative titles for the given title. Preferring link over title argument
 
-        :param title:
-        :param link:
+        :type title: str
+        :type link: str
         :return:
         """
         if title and not link:
@@ -77,11 +78,11 @@ class MyAnimeList(object):
         return MyAnimeList.group_titles(release_title=release_title, soup=soup)
 
     @staticmethod
-    def group_titles(release_title, soup):
-        """
+    def group_titles(release_title: str, soup) -> dict:
+        """Extract and group the titles of the bs4 Tag to their respective language
 
-        :param release_title:
-        :param soup:
+        :type release_title: str
+        :type soup: bs4.element.Tag|None
         :return:
         """
         grouped_titles = {}
@@ -91,7 +92,7 @@ class MyAnimeList(object):
         grouped_titles['english'] = [release_title]
 
         if soup:
-            for search_result in soup.find_all('div', attrs={'class': 'spaceit_pad'}):  # type: bs4.element.Tag
+            for search_result in soup.find_all('div', attrs={'class': 'spaceit_pad'}):  # type:
                 category = search_result.find('span', attrs={'class': 'dark_text'})
                 if category:
                     val = "".join([t for t in search_result.contents if type(t) == bs4.element.NavigableString]).strip()

@@ -1,6 +1,8 @@
 #!/usr/local/bin/python
 # coding: utf-8
+
 import re
+from typing import Tuple
 
 import jellyfish
 import requests
@@ -18,10 +20,10 @@ class BakaUpdates(object):
     ADDED_KEYWORDS = [' (Novel)']
 
     @staticmethod
-    def get_similar_titles(title):
+    def get_similar_titles(title: str) -> list:
         """Main function for extracting alternate titles
 
-        :param title:
+        :type title: str
         :return:
         """
         payload = {
@@ -51,11 +53,11 @@ class BakaUpdates(object):
         return results
 
     @staticmethod
-    def get_alternative_titles(title='', link=''):
+    def get_alternative_titles(title: str = '', link: str = '') -> dict:
         """Get alternative titles for the given title. Preferring link over title argument
 
-        :param title:
-        :param link:
+        :type title: str
+        :type link: str
         :return:
         """
         if title and not link:
@@ -70,10 +72,10 @@ class BakaUpdates(object):
         return BakaUpdates.group_titles(release_title, alternative_titles)
 
     @staticmethod
-    def extract_titles(html_content):
+    def extract_titles(html_content: str) -> Tuple[str, list]:
         """Extract the titles from the HTML DOM tree
 
-        :param html_content:
+        :type html_content: str
         :return:
         """
         # html.parser can't handle <br> tags instead of <br/> tags and will append all titles as child
@@ -91,11 +93,11 @@ class BakaUpdates(object):
         return release_title, alternative_titles
 
     @staticmethod
-    def group_titles(release_title, alternative_titles):
+    def group_titles(release_title: str, alternative_titles: list) -> dict:
         """Iterate through the supported languages and group the titles according to the detected languages
 
-        :param release_title:
-        :param alternative_titles:
+        :type release_title: str
+        :type alternative_titles: str
         :return:
         """
         grouped_titles = {}
@@ -113,10 +115,10 @@ class BakaUpdates(object):
         return grouped_titles
 
     @staticmethod
-    def clean_title(title):
+    def clean_title(title: str) -> str:
         """Strip title from leftover spaces and remove keywords added by BakaUpdates
 
-        :param title:
+        :type title: str
         :return:
         """
         title = title.strip()

@@ -1,3 +1,6 @@
+#!/usr/local/bin/python
+# coding: utf-8
+
 from titlesearch.mal import MyAnimeList
 
 example_title = "Baka to Test"

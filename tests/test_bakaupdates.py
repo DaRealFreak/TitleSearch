@@ -1,3 +1,6 @@
+#!/usr/local/bin/python
+# coding: utf-8
+
 from titlesearch.bakaupdates import BakaUpdates
 
 example_title = "Baka to Test"

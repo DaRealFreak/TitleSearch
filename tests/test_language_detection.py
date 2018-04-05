@@ -1,5 +1,6 @@
 #!/usr/local/bin/python
 # coding: utf-8
+
 import unittest
 
 from titlesearch.language.detection import matches_language

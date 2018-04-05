@@ -1,5 +1,6 @@
 #!/usr/local/bin/python
 # coding: utf-8
+
 import re
 
 import jellyfish
@@ -18,10 +19,10 @@ class VisualNovelDatabase(object):
     KNOWN_LANGUAGES = [English, Japanese, Korean]
 
     @staticmethod
-    def get_similar_titles(title):
+    def get_similar_titles(title: str) -> list:
         """Main function for extracting alternate titles
 
-        :param title:
+        :type title: str
         :return:
         """
         payload = {
@@ -45,7 +46,6 @@ class VisualNovelDatabase(object):
                 'similarity': 1.00
             }]
 
-        # maincontent > div.mainbox.browse.vnbrowse > table > tbody > tr:nth-child > td.tc1 > a
         title_links = soup.select('tbody td a')
         for search_result in title_links:
             results.append({
@@ -58,11 +58,11 @@ class VisualNovelDatabase(object):
         return results
 
     @staticmethod
-    def get_alternative_titles(title='', link=''):
+    def get_alternative_titles(title: str = '', link: str = '') -> dict:
         """Get alternative titles for the given title. Preferring link over title argument
 
-        :param title:
-        :param link:
+        :type title: str
+        :type link: str
         :return:
         """
         if title and not link:
@@ -87,16 +87,16 @@ class VisualNovelDatabase(object):
                                                 alternative_titles=alternative_titles)
 
     @staticmethod
-    def parse_results(html_content):
-        """
+    def parse_results(html_content: str) -> dict:
+        """Parse the result table of the HTML content into a dictionary
 
-        :param html_content:
+        :type html_content: str
         :return:
         """
         soup = Soup(html_content, 'html.parser')
         result_data = {}
 
-        # parse the result table into a dictionary
+        #
         table_body = soup.select_one('div.vndetails table')
         rows = table_body.find_all('tr')
         for row in rows:
@@ -108,11 +108,11 @@ class VisualNovelDatabase(object):
         return result_data
 
     @staticmethod
-    def group_titles(release_title, alternative_titles):
+    def group_titles(release_title: str, alternative_titles: list) -> dict:
         """Iterate through the supported languages and group the titles according to the detected languages
 
-        :param release_title:
-        :param alternative_titles:
+        :type release_title: str
+        :type alternative_titles: list
         :return:
         """
         grouped_titles = {}
