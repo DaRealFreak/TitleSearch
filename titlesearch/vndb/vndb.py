@@ -65,21 +65,35 @@ class VisualNovelDatabase(object):
         :param link:
         :return:
         """
-        grouped_titles = {}
-        for language in VisualNovelDatabase.KNOWN_LANGUAGES:
-            grouped_titles[language.__name__.lower()] = []
-
         if title and not link:
             link = VisualNovelDatabase.get_similar_titles(title)
             if link:
                 link = link[0]['link']
             else:
-                return grouped_titles
+                return VisualNovelDatabase.group_titles(title, [])
 
         link = requests.get(url=link)
 
-        soup = Soup(link.text, 'html.parser')
+        result_data = VisualNovelDatabase.parse_results(link.text)
 
+        alternative_titles = []
+        if 'Aliases' in result_data:
+            for alternative_title in result_data['Aliases'].split(', '):
+                alternative_titles.append(alternative_title)
+        if 'Original title' in result_data:
+            alternative_titles.append(result_data['Original title'])
+
+        return VisualNovelDatabase.group_titles(release_title=result_data['Title'],
+                                                alternative_titles=alternative_titles)
+
+    @staticmethod
+    def parse_results(html_content):
+        """
+
+        :param html_content:
+        :return:
+        """
+        soup = Soup(html_content, 'html.parser')
         result_data = {}
 
         # parse the result table into a dictionary
@@ -91,14 +105,21 @@ class VisualNovelDatabase(object):
             if cols[1:]:
                 result_data[cols[0]] = cols[1]
 
-        grouped_titles['english'] = [result_data['Title']]
+        return result_data
 
-        alternative_titles = []
-        if 'Aliases' in result_data:
-            for alternative_title in result_data['Aliases'].split(', '):
-                alternative_titles.append(alternative_title)
-        if 'Original title' in result_data:
-            alternative_titles.append(result_data['Original title'])
+    @staticmethod
+    def group_titles(release_title, alternative_titles):
+        """Iterate through the supported languages and group the titles according to the detected languages
+
+        :param release_title:
+        :param alternative_titles:
+        :return:
+        """
+        grouped_titles = {}
+        for language in VisualNovelDatabase.KNOWN_LANGUAGES:
+            grouped_titles[language.__name__.lower()] = []
+
+        grouped_titles['english'] = [release_title]
 
         for title in alternative_titles:
             for language in VisualNovelDatabase.KNOWN_LANGUAGES:
