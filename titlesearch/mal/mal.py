@@ -58,64 +58,48 @@ class MyAnimeList(object):
         :param link:
         :return:
         """
-        grouped_titles = {}
-        for language in MyAnimeList.KNOWN_LANGUAGES:
-            grouped_titles[language.__name__.lower()] = []
-
         if title and not link:
             link = MyAnimeList.get_similar_titles(title)
             if link:
                 link = link[0]['link']
             else:
-                return grouped_titles
+                return MyAnimeList.group_titles(title, None)
 
         link = requests.get(url=link)
-
         soup = Soup(link.text, 'html5lib')
 
         release_title = soup.find('span', attrs={'itemprop': 'name'})
+        if release_title:
+            release_title = release_title.text
+        else:
+            release_title = title if title else ''
+
+        return MyAnimeList.group_titles(release_title=release_title, soup=soup)
+
+    @staticmethod
+    def group_titles(release_title, soup):
         """
-        recreating an array vs appending values to an array
 
-        a = []; a = [1]
-        runtime:
-            >> timeit.timeit('a = []; a = [1]', number=10**7)
-            >> 0.5276432445431638
-
-        1            0 BUILD_LIST               0
-                     2 STORE_NAME               0 (a)
-                     4 LOAD_CONST               0 (1)
-                     6 BUILD_LIST               1
-                     8 STORE_NAME               0 (a)
-                     10 LOAD_CONST              1 (None)
-                     12 RETURN_VALUE
-
-        a = []; a.append(1)
-        runtime:
-            >> timeit.timeit('a = []; a.append(1)', number=10**7)
-            >> 0.99629117289982
-
-        1           0 BUILD_LIST               0
-                    2 STORE_NAME               0 (a)
-                    4 LOAD_NAME                0 (a)
-                    6 LOAD_ATTR                1 (append)
-                    8 LOAD_CONST               0 (1)
-                    10 CALL_FUNCTION           1
-                    12 POP_TOP
-                    14 LOAD_CONST              1 (None)
-                    16 RETURN_VALUE
+        :param release_title:
+        :param soup:
+        :return:
         """
-        grouped_titles['english'] = [release_title.text]
+        grouped_titles = {}
+        for language in MyAnimeList.KNOWN_LANGUAGES:
+            grouped_titles[language.__name__.lower()] = []
 
-        for search_result in soup.find_all('div', attrs={'class': 'spaceit_pad'}):  # type: bs4.element.Tag
-            category = search_result.find('span', attrs={'class': 'dark_text'})
-            if category:
-                value = "".join([t for t in search_result.contents if type(t) == bs4.element.NavigableString]).strip()
-                if category.text.strip() == 'Synonyms:':
-                    for synonym in value.split(', '):
-                        grouped_titles[MyAnimeList.MAPPING[category.text]].append(synonym)
-                else:
-                    if category.text.strip() in MyAnimeList.MAPPING:
-                        grouped_titles[MyAnimeList.MAPPING[category.text.strip()]].append(value)
+        grouped_titles['english'] = [release_title]
+
+        if soup:
+            for search_result in soup.find_all('div', attrs={'class': 'spaceit_pad'}):  # type: bs4.element.Tag
+                category = search_result.find('span', attrs={'class': 'dark_text'})
+                if category:
+                    val = "".join([t for t in search_result.contents if type(t) == bs4.element.NavigableString]).strip()
+                    if category.text.strip() == 'Synonyms:':
+                        for synonym in val.split(', '):
+                            grouped_titles[MyAnimeList.MAPPING[category.text]].append(synonym)
+                    else:
+                        if category.text.strip() in MyAnimeList.MAPPING:
+                            grouped_titles[MyAnimeList.MAPPING[category.text.strip()]].append(val)
 
         return grouped_titles
