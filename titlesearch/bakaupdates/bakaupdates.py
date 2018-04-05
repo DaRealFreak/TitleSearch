@@ -58,22 +58,27 @@ class BakaUpdates(object):
         :param link:
         :return:
         """
-        grouped_titles = {}
-        for language in BakaUpdates.KNOWN_LANGUAGES:
-            grouped_titles[language.__name__.lower()] = []
-
         if title and not link:
             link = BakaUpdates.get_similar_titles(title)
             if link:
                 link = link[0]['link']
             else:
-                return grouped_titles
+                return BakaUpdates.group_titles(title, [])
 
         link = requests.get(url=link)
+        release_title, alternative_titles = BakaUpdates.extract_titles(link.text)
+        return BakaUpdates.group_titles(release_title, alternative_titles)
 
+    @staticmethod
+    def extract_titles(html_content):
+        """Extract the titles from the HTML DOM tree
+
+        :param html_content:
+        :return:
+        """
         # html.parser can't handle <br> tags instead of <br/> tags and will append all titles as child
         # to the previous title, html5lib is slower but works properly
-        soup = Soup(link.text, 'html5lib')
+        soup = Soup(html_content, 'html5lib')
 
         release_title = soup.find('span', attrs={'class': ['releasestitle', 'tabletitle']}).text
         associated_names_tag = soup.find('b', string=re.compile("Associated Names"))
@@ -82,6 +87,20 @@ class BakaUpdates(object):
             br.replace_with("\n")
         alternative_titles = [BakaUpdates.clean_title(title) for title in alternative_titles.text.split('\n')
                               if title.strip()]
+
+        return release_title, alternative_titles
+
+    @staticmethod
+    def group_titles(release_title, alternative_titles):
+        """Iterate through the supported languages and group the titles according to the detected languages
+
+        :param release_title:
+        :param alternative_titles:
+        :return:
+        """
+        grouped_titles = {}
+        for language in BakaUpdates.KNOWN_LANGUAGES:
+            grouped_titles[language.__name__.lower()] = []
 
         grouped_titles['english'] = [release_title]
 
