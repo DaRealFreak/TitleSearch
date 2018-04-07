@@ -95,12 +95,13 @@ class MyAnimeList(object):
             for search_result in soup.find_all('div', attrs={'class': 'spaceit_pad'}):  # type:
                 category = search_result.find('span', attrs={'class': 'dark_text'})
                 if category:
-                    val = "".join([t for t in search_result.contents if type(t) == bs4.element.NavigableString]).strip()
+                    value = "".join(
+                        [t for t in search_result.contents if isinstance(t, bs4.element.NavigableString)]).strip()
                     if category.text.strip() == 'Synonyms:':
-                        for synonym in val.split(', '):
+                        for synonym in value.split(', '):
                             grouped_titles[MyAnimeList.MAPPING[category.text]].append(synonym)
                     else:
                         if category.text.strip() in MyAnimeList.MAPPING:
-                            grouped_titles[MyAnimeList.MAPPING[category.text.strip()]].append(val)
+                            grouped_titles[MyAnimeList.MAPPING[category.text.strip()]].append(value)
 
         return grouped_titles
